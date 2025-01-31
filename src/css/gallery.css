@@ -2,7 +2,7 @@
   font-family: 'Montserrat', sans-serif;
 
   padding-top: 30px;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
 }
 
 .form {
@@ -30,7 +30,6 @@
   outline: none;
 
   width: 272px;
-  /* height: 40px; */
 }
 
 .form-input::placeholder {
@@ -45,7 +44,8 @@
   border-color: #4e75ff;
 }
 
-.form-btn {
+.form-btn,
+.load-more {
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -55,21 +55,25 @@
 
   border-radius: 8px;
   padding: 8px 16px;
-  /* width: 75px;
-  height: 40px; */
   background-color: #4e75ff;
   transition: background-color 250ms ease-in-out;
 
   font-weight: 500;
-  font-size: 16px;
   line-height: 1.5;
   letter-spacing: 0.04em;
   color: #fff;
 }
 
 .form-btn:hover,
-.form-btn:focus {
+.form-btn:focus,
+.load-more:hover,
+.load-more:focus {
   background-color: #6c8cff;
+}
+
+.load-more {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .gallery {
@@ -81,15 +85,26 @@
 
   padding-left: 15px;
   padding-right: 15px;
-}
 
-/* width: 1128px;
-height: 200px; */
+  padding-bottom: 20px;
+}
 
 .gallery-card {
   border: 1px solid #808080;
 
   width: calc((100% - 48px) / 3);
+
+  transition: transform 250ms ease-in-out;
+  outline: none;
+}
+
+.gallery-card a:focus-visible {
+  outline: none;
+}
+
+.gallery-card:has(a:focus-visible),
+.gallery-card:hover {
+  transform: scale(1.05);
 }
 
 .card-top-part {
@@ -134,4 +149,15 @@ height: 200px; */
   line-height: 2;
   letter-spacing: 0.04em;
   color: #2e2f42;
+}
+
+.load-more {
+  display: flex;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.load-more.hidden {
+  display: none;
 }
