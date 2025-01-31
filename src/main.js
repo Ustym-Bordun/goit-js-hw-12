@@ -119,74 +119,96 @@ const onFormSubmit = async event => {
 
     if (totalPages > 1) {
       loadMoreBtnEl.classList.remove('hidden');
-
-      loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick);
     }
   } catch (error) {
-    console.log(error);
-  }
-};
-
-const onLoadMoreBtnClick = async () => {
-  searchedPage++;
-
-  loaderEl.classList.remove('hidden');
-  loadMoreBtnEl.classList.add('hidden');
-
-  const {
-    data: { hits },
-  } = await fetchPhotos(searchedQuery, searchedPage, searchedPerPage);
-
-  loadMoreBtnEl.classList.remove('hidden');
-
-  loaderEl.classList.add('hidden');
-
-  galleryEl.insertAdjacentHTML('beforeend', createGalleryCardTemplate(hits));
-
-  simplelightbox.refresh();
-
-  iziToast.success({
-    message: `Here are more of these images.`,
-    messageSize: '16',
-    messageColor: '#ffffff',
-    backgroundColor: '#59a10d',
-    position: 'topRight',
-    maxWidth: '432',
-    closeOnClick: true,
-    timeout: 3500,
-    close: false,
-    iconUrl: successIcon,
-  });
-
-  const galleryCardEl = document.querySelector('.gallery-card');
-  const galleryCardElHeight = galleryCardEl.getBoundingClientRect().height;
-
-  window.scrollBy({
-    top: galleryCardElHeight * 3, // Прокрутка на три висоти карточки
-    behavior: 'smooth',
-  });
-
-  if (searchedPage === totalPages) {
-    iziToast.info({
-      message: `We're sorry, but you've reached the end of search results.`,
+    iziToast.error({
+      message: `Something went wrong :${error}`,
       messageSize: '16',
       messageColor: '#ffffff',
-      backgroundColor: '#ffa000',
+      backgroundColor: '#ef4040',
       position: 'topRight',
       maxWidth: '432',
       closeOnClick: true,
       timeout: 3500,
       close: false,
-      iconUrl: infoIcon,
+      iconUrl: errorIcon,
     });
+    // console.log(error);
+  }
+};
 
+const onLoadMoreBtnClick = async () => {
+  try {
+    searchedPage++;
+
+    loaderEl.classList.remove('hidden');
     loadMoreBtnEl.classList.add('hidden');
 
-    loadMoreBtnEl.removeEventListener('click', onLoadMoreBtnClick);
+    const {
+      data: { hits },
+    } = await fetchPhotos(searchedQuery, searchedPage, searchedPerPage);
+
+    loadMoreBtnEl.classList.remove('hidden');
+    loaderEl.classList.add('hidden');
+
+    galleryEl.insertAdjacentHTML('beforeend', createGalleryCardTemplate(hits));
+    simplelightbox.refresh();
+    iziToast.success({
+      message: `Here are more of these images.`,
+      messageSize: '16',
+      messageColor: '#ffffff',
+      backgroundColor: '#59a10d',
+      position: 'topRight',
+      maxWidth: '432',
+      closeOnClick: true,
+      timeout: 3500,
+      close: false,
+      iconUrl: successIcon,
+    });
+
+    const galleryCardEl = document.querySelector('.gallery-card');
+    const galleryCardElHeight = galleryCardEl.getBoundingClientRect().height;
+    window.scrollBy({
+      top: galleryCardElHeight * 3, // Прокрутка вниз на три висоти карточки
+      behavior: 'smooth',
+    });
+
+    if (searchedPage === totalPages) {
+      iziToast.info({
+        message: `We're sorry, but you've reached the end of search results.`,
+        messageSize: '16',
+        messageColor: '#ffffff',
+        backgroundColor: '#ffa000',
+        position: 'topRight',
+        maxWidth: '432',
+        closeOnClick: true,
+        timeout: 3500,
+        close: false,
+        iconUrl: infoIcon,
+      });
+
+      loadMoreBtnEl.classList.add('hidden');
+    }
+  } catch (error) {
+    iziToast.error({
+      message: `Something went wrong :${error}`,
+      messageSize: '16',
+      messageColor: '#ffffff',
+      backgroundColor: '#ef4040',
+      position: 'topRight',
+      maxWidth: '432',
+      closeOnClick: true,
+      timeout: 3500,
+      close: false,
+      iconUrl: errorIcon,
+    });
+    // console.log(error);
   }
 };
 
 formEl.addEventListener('submit', onFormSubmit);
+
+loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick);
 
 window.addEventListener('scroll', () => {
   if (window.scrollY > 300) {
